@@ -449,7 +449,7 @@ with tab2:
 
             # Normalized Differences
             st.header('Normalized Temperature Difference')
-            if 'BT01' not in selected_devices or 'TT01' not in df['Device'].unique():
+            if 'BT01' not in selected_devices or 'BT01' not in df['Device'].unique():
                 st.info('Outdoor reference data must be selected and available to display Normalized Plots')
             else:
                 df_out = df[df['Device']=='BT01'][['Timestamp','Temp_F','RH']].rename(columns={'Temp_F':'T_out','RH':'RH_out'})
