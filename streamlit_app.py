@@ -11,11 +11,15 @@ import streamlit as st
 
 # --- Device name mapping ---
 DEVICE_LABELS = {
-    'HT01': "Outdoor Reference",
-    'HT02': "East-Attic",
-    'HT03': "West-Attic",
-    'HT04': "East-Main",
-    'HT05': "West-Main",
+    'BT01': "Outdoor Reference",
+    'BT02': "2nd Floor-Attic",
+    'BT03': "Garage-Attic",
+    'BT04': "Kitchen-Attic",
+    'BT05': "Kitchen-Main",
+    'BT06': "Linnen Shelf-Basement",
+    'BT07': "2nd Floor Bedroom-Main",
+    'BT08': "Lower Garage-Basement",
+    'BT09': "Mechanical Room-Basement",
 }
 
 
@@ -45,7 +49,7 @@ KPI_COLOR_RANGES = {
             "yellow": (20, 60),
         },
     },
-    "Crawlspace": {
+    "Basement": {
         "Average Temperature (°F)": {
             "green": (50, 70),
             "yellow": (40, 80),
@@ -175,17 +179,17 @@ def dewpoint_f(temp_f, rh):
 # Derive groups dynamically from DEVICE_LABELS so new files are
 # automatically shown in the sidebar.
 main = [d for d, lbl in DEVICE_LABELS.items() if lbl.endswith("-Main")]
-crawlspace = [d for d, lbl in DEVICE_LABELS.items() if lbl.endswith("-Crawlspace")]
+Basement = [d for d, lbl in DEVICE_LABELS.items() if lbl.endswith("-Basement")]
 attic = [d for d, lbl in DEVICE_LABELS.items() if lbl.endswith("-Attic")]
 outdoor = [d for d, lbl in DEVICE_LABELS.items() if "Outdoor" in lbl]
 
 location_map = {d: "Main" for d in main}
-location_map.update({d: "Crawlspace" for d in crawlspace})
+location_map.update({d: "Basement" for d in Basement})
 location_map.update({d: "Attic" for d in attic})
 location_map.update({d: "Outdoor" for d in outdoor})
 
 # --- Streamlit App Configuration ---
-st.set_page_config(page_title='1 Hilltop Rd: 2025 Environmental Data', layout='wide')
+st.set_page_config(page_title='175 Bent Tree Rd: 2025 Environmental Data', layout='wide')
 # Display logo
 script_dir = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(script_dir, "Logo.png")
@@ -194,7 +198,7 @@ if os.path.exists(logo_path):
 else:
     st.warning(f"Logo not found at {logo_path}")
 
-st.header('1 Hilltop Rd: 2025 Environmental Data')
+st.header('175 Bent Tree Rd: 2025 Environmental Data')
 
 # Sidebar settings
 st.sidebar.title('Settings')
@@ -278,7 +282,7 @@ def group_ui(group, label):
 
 # Apply groupings
 group_ui(main, 'Main')
-group_ui(crawlspace, 'Crawlspace')
+group_ui(Basement, 'Basement')
 group_ui(attic, 'Attic')
 group_ui(outdoor, 'Outdoor Reference')
 
@@ -333,7 +337,7 @@ with tab1:
 
         color_map = {'green': '#ccffcc', 'yellow': '#ffffcc', 'red': '#ffcccc'}
 
-        for loc in ["Crawlspace", "Main", "Attic"]:
+        for loc in ["Basement", "Main", "Attic"]:
             loc_df = indoor_df[indoor_df['Location'] == loc]
             if loc_df.empty:
                 continue
